@@ -10,11 +10,6 @@ from pathlib import Path
 from github import Github
 from github import GithubException
 
-print("""
-DEPRECATED! 'tip' was merged into pyTooling/Actions and renamed to 'releaser'.
-It is recommended to use `uses: pyTooling/Actions/releaser@main`, instead of `uses: eine/tip@master`.
-""")
-
 print("· Get list of artifacts to be uploaded")
 
 args = []
@@ -98,7 +93,7 @@ if gh_ref[0:10] == "refs/tags/":
                 # is a regular semver compilant tag
                 is_prerelease = False
             elif getenv("INPUT_SNAPSHOTS", "true") == "true":
-                # is semver compilant prerelease tag, thus a snapshot (we skip it)
+                # is semver compliant prerelease tag, thus a snapshot (we skip it)
                 print("! Skipping snapshot prerelease")
                 sys.exit()
 
@@ -200,8 +195,3 @@ if is_draft:
         tag_name=gh_release.tag_name,
         target_commitish=gh_release.target_commitish,
     )
-
-if ("GITHUB_SHA" in environ) and (env_tag is None):
-    sha = environ["GITHUB_SHA"]
-    print(f" > Force-push '{tag!s}' to {sha!s}")
-    gh_repo.get_git_ref(f"tags/{tag!s}").edit(sha)
